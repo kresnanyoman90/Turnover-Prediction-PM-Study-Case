@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HR Turnover Dashboard - Rakamin</title>
+<!-- Google Fonts: Nunito Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#01949E',
+            secondary: '#FDC039',
+            mainBg: '#F5F6FA',
+            sidebarBg: '#FFFFFF',
+            cardBg: '#FFFFFF',
+            accentRed: '#FF4D4F',
+            accentGreen: '#52C41A',
+          },
+          fontFamily: {
+            sans: ['Nunito Sans', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+body {
+    background-color: #F5F6FA;
+    font-family: "Nunito Sans", sans-serif
+    }
+.card-container {
+    position: relative;
+    overflow: hidden;
+    background-color: #FFFFFF !important
+    }
+/* Active sidebar link styling */
+.nav-active {
+    background-color: #01949E;
+    color: white !important
+    }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px
+    }
+::-webkit-scrollbar-track {
+    background: #f1f1f1
+    }
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/></head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+<body class="flex h-screen overflow-hidden">
+
+<!-- Overlay untuk mobile -->
+<div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300"></div>
+
+<!-- BEGIN: Sidebar -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-sidebarBg flex flex-col border-r border-gray-100 shrink-0 transform -translate-x-full md:translate-x-0 md:relative md:flex transition-transform duration-300 ease-in-out" data-purpose="sidebar-navigation">
+    <!-- Logo -->
+    <div class="p-8 flex items-center justify-between">
+        <img alt="Rakamin Logo" class="h-8" src="rakamin-logo.png"/>
+        <!-- <div class="text-primary font-extrabold text-2xl flex items-center">
+            <span class="mr-1">&lt;/</span> Rakamin
+        </div> -->
+        <!-- Tombol Close (Hanya di HP) -->
+        <button onclick="toggleSidebar()" class="md:hidden text-gray-400 p-1">
+            <span class="material-symbols-rounded">close</span>
+        </button>
+    </div>
+
+
+
+    <!-- Navigation Links -->
+
+    <!-- Navigation Links -->
+        <nav class="flex-1 px-4 space-y-1 mt-4 overflow-y-auto">
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                <span class="text-sm font-semibold">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 nav-active rounded-lg transition-colors shadow-sm" href="#">
+                <span class="material-symbols-outlined text-[20px]">swap_calls</span>
+                <span class="text-sm font-semibold">Turnover</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">star</span>
+                <span class="text-sm font-semibold">Favorites</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+                <span class="text-sm font-semibold">Inbox</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">list_alt</span>
+                <span class="text-sm font-semibold">Order Lists</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                <span class="text-sm font-semibold">Product Stock</span>
+            </a>
+        </nav>
+    <!-- <nav class="flex-1 px-4 space-y-2 mt-4">
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">home</span></span> Dashboard
+        </a>
+        <a class="flex items-center px-4 py-3 nav-active rounded-lg transition-colors font-semibold shadow-md" href="#">
+            <span class="w-6 mr-3">
+                
+                <span class="material-symbols-rounded">swap_calls</span></span> Turnover
+        </a>
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">star</span></span> Favorites
+        </a>
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">mail</span></span> Inbox
+        </a>
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">list_alt</span></span> Order Lists
+        </a>
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">inventory_2</span></span> Product Stock
+        </a>
+    </nav> -->
+
+    <!-- Bottom Actions -->
+
+    
+        <div class="px-4 py-8 border-t border-gray-100 space-y-1 shrink-0">
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">settings</span>
+                <span class="text-sm font-semibold">Settings</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <span class="text-sm font-semibold">Logout</span>
+            </a>
+        </div>
+    <!-- <div class="px-4 py-8 border-t border-gray-100 space-y-2">
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">settings</span></span> Settings
+        </a>
+        <a class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors font-semibold" href="#">
+            <span class="w-6 mr-3"><span class="material-symbols-rounded">logout</span></span> Logout
+        </a>
+    </div> -->
+</aside>
+<!-- END: Sidebar -->
+
+<!-- Main Application Area -->
+<div class="flex-1 flex flex-col overflow-hidden">
+    <!-- BEGIN: Header -->
+    <header class="h-20 bg-white flex items-center justify-between px-6 md:px-10 shrink-0 border-b border-gray-100" data-purpose="top-header">
+        
+        <!-- Hamburger Button untuk HP -->
+        <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 text-gray-600 bg-gray-50 rounded-lg mr-2">
+            <span class="material-symbols-rounded">menu</span>
+        </button>
+
+        <!-- Search Input -->
+        <div class="relative flex-1 md:w-1/3 max-w-md">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+            </span>
+            <input class="w-full pl-12 pr-4 py-2 bg-gray-100 border-none rounded-full focus:ring-2 focus:ring-primary text-sm" placeholder="Search" type="text"/>
+        </div>
+
+        <!-- User Profile & Notifications -->
+        <div class="flex items-center gap-3 md:gap-6 ml-4">
+            <!-- Notification -->
+            <div class="relative cursor-pointer hidden sm:block">
+                <div class="p-2 bg-gray-100 rounded-full text-gray-500">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+                <span class="absolute -top-1 -right-1 bg-accentRed text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">6</span>
+            </div>
+            <!-- User -->
+            <div class="flex items-center gap-3">
+                
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-gray-800 leading-tight">Ucup</p>
+                    <p class="text-xs text-gray-400">Manajer HR</p>
+                </div>
+                <img alt="User avatar" class="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9bs82NB2pyOrxJ6oH8kisBrs97fvjJf0WPiTLWdGy1GmwlMVn2EZ-BRz59xfu6rz6ianWeogZINlAASXMLwKSLDKFnqgpoLAPb3QGW5Xcf5pKfIyYsOrUXbrOngH2O1dB8M07PuxcArZJp9i3zXCzT-5bWggzhazNN5PLpC2eQwqASixXwfWOdOvDC1QO3xB5qQRkKJV2iE3O0MwVjSzQghBN3ZMUs7bj31orACGHswUhFS634PiVOLDzc2gFqD1DT7duC7wBqF7C"/>
+                <!-- <svg class="h-4 w-4 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> -->
+                    <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+    <!-- END: Header -->
+
+    <!-- BEGIN: Main Content -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-10" data-purpose="main-dashboard-content">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 md:mb-8">Turnover</h1>
+        
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+            <!-- Card 1 -->
+       
+            <div class="bg-cardBg p-6 md:p-8 rounded-2xl shadow-sm border border-gray-50 flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 font-semibold mb-2 text-sm md:text-base">Total Employee at Risk</p>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">124</h2>
+                </div>
+                <div class="flex items-center gap-1 bg-red-50 text-accentRed px-3 py-1.5 rounded-full font-bold text-xs md:text-sm">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    4.3%
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-cardBg p-6 md:p-8 rounded-2xl shadow-sm border border-gray-50 flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 font-semibold mb-2 text-sm md:text-base">Avg. Turnover Risk</p>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">40%</h2>
+                </div>
+                <div class="flex items-center gap-1 bg-teal-50 text-primary px-3 py-1.5 rounded-full font-bold text-xs md:text-sm">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    1.8%
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="flex flex-col md:flex-row gap-4 mb-10">
+            <div class="relative w-full md:w-48">
+                <select class="w-full pl-10 pr-4 py-3 md:py-4 bg-white border-none rounded-xl shadow-sm text-gray-600 font-semibold appearance-none focus:ring-primary text-sm md:text-base">
+                    <option>Filter By</option>
+                </select>
+                <span class="absolute left-4 top-1/2 -translate-y-1/2">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="relative flex-1">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </span>
+                <input class="w-full pl-12 pr-4 py-3 md:py-4 bg-white border-none rounded-xl shadow-sm text-gray-600 focus:ring-primary text-sm md:text-base" placeholder="Search name or role" type="text"/>
+            </div>
+            <button class="bg-primary text-white font-bold py-3 md:py-0 px-10 rounded-xl hover:bg-opacity-90 transition-all shadow-md">Apply Search</button>
+        </div>
+
+        <!-- Employee Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <!-- Card 1 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-gray-800 leading-tight">Ucup Markisa</h3>
+                            <p class="text-gray-400 text-sm">Admin</p>
+                        </div>
+                        <div class="w-3 h-3 bg-accentRed rounded-full"></div>
+                    </div>
+                    <div class="my-auto">
+                        <p class="text-gray-400 text-xs font-bold mb-1 uppercase tracking-wider">Turnover Risk</p>
+                        <p class="text-4xl font-extrabold text-accentRed">85%</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">85%</span>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Card 2 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-gray-800 leading-tight">Simmi Simorangkir</h3>
+                            <p class="text-gray-400 text-sm">Senior Sales</p>
+                        </div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto">
+                        <p class="text-gray-400 text-xs font-bold mb-1 uppercase tracking-wider">Turnover Risk</p>
+                        <p class="text-4xl font-extrabold text-gray-800">35%</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t ">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">95%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-gray-800 leading-tight">Uni Farida</h3>
+                            <p class="text-gray-400 text-sm">Senior Admin</p>
+                        </div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto">
+                        <p class="text-gray-400 text-xs font-bold mb-1 uppercase tracking-wider">Turnover Risk</p>
+                        <p class="text-4xl font-extrabold text-gray-800">25%</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t ">
+                        <span class="text-secondary font-bold text-xs uppercase">Need Review</span>
+                        <span class="text-secondary font-bold text-xs opacity-60">30%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 4 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Ipil Dungdung</h3><p class="text-gray-400 text-sm">Admin</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">45%</p></div>
+                    <div class="flex justify-between pt-4 border-t ">
+                        <span class="text-secondary font-bold text-xs uppercase">Need Review</span>
+                        <span class="text-secondary font-bold text-xs opacity-60">50%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 5 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Kirei Juno</h3><p class="text-gray-400 text-sm">Sales</p></div>
+                        <div class="w-3 h-3 bg-accentRed rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold text-accentRed">82%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">90%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 6 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Shanny Cikuro</h3><p class="text-gray-400 text-sm">UI/UX</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">45%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-secondary font-bold text-xs uppercase">Need Review</span>
+                        <span class="text-secondary font-bold text-xs opacity-60">43%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 7 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Akina Murakami</h3><p class="text-gray-400 text-sm">Senior Backend</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">15%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">86%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 8 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Budi Santoso</h3><p class="text-gray-400 text-sm">Product Manager</p></div>
+                        <div class="w-3 h-3 bg-accentRed rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold text-accentRed">88%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-secondary font-bold text-xs uppercase">Need Review</span>
+                        <span class="text-secondary font-bold text-xs opacity-60">42%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 9 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Siti Aminah</h3><p class="text-gray-400 text-sm">Finance</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">30%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">80%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 10 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">David Chen</h3><p class="text-gray-400 text-sm">Data Analyst</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">55%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-secondary font-bold text-xs uppercase">Need Review</span>
+                        <span class="text-secondary font-bold text-xs opacity-60">22%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 11 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Maria Garcia</h3><p class="text-gray-400 text-sm">HR Specialist</p></div>
+                        <div class="w-3 h-3 bg-accentRed rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold text-accentRed">92%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">98%</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 12 -->
+            <a href="detail-karyawan.html" class="rounded-2xl hover:ring-2 hover:ring-primary transition-all cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col min-h-[280px]">
+                    <div class="flex justify-between items-start mb-6">
+                        <div><h3 class="text-xl font-extrabold">Kenji Tanaka</h3><p class="text-gray-400 text-sm">Cloud Engineer</p></div>
+                        <div class="w-3 h-3 bg-teal-100 rounded-full"></div>
+                    </div>
+                    <div class="my-auto"><p class="text-4xl font-extrabold">20%</p></div>
+                    <div class="flex justify-between pt-4 border-t">
+                        <span class="text-teal-500 font-bold text-xs uppercase">Verified Match</span>
+                        <span class="text-teal-500 font-bold text-xs opacity-60">88%</span>
+                    </div>
+                </div>
+            </a>
+
+            
+            
+            <!-- Ulangi Card sesuai kebutuhan... -->
+
+        </div>
+    </main>
+    <!-- END: Main Content -->
+</div>
+
+<!-- JAVASCRIPT UNTUK SIDEBAR -->
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        
+        if (sidebar.classList.contains('-translate-x-full')) {
+            // Buka Sidebar
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        } else {
+            // Tutup Sidebar
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>
